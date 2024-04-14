@@ -24,11 +24,22 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User loginUser(String username, String password) {
+    public User loginUser(String username, String password, String Role) {
         Optional<User> optionalCustomer = userRepository.findByUsername(username);
         if (optionalCustomer.isPresent()) {
             User user = optionalCustomer.get();
-            if (passwordEncoder.matches(password, user.getPassword())) {
+            if (passwordEncoder.matches(password, user.getPassword()) && Role.equals("user")) {
+                return user; // Trả về khách hàng nếu mật khẩu khớp
+            }
+        }
+        return null; // Trả về null nếu đăng nhập thất bại
+    }
+
+    public User loginAdmin(String username, String password, String Role) {
+        Optional<User> optionalCustomer = userRepository.findByUsername(username);
+        if (optionalCustomer.isPresent()) {
+            User user = optionalCustomer.get();
+            if (passwordEncoder.matches(password, user.getPassword()) && Role.equals("admin")) {
                 return user; // Trả về khách hàng nếu mật khẩu khớp
             }
         }

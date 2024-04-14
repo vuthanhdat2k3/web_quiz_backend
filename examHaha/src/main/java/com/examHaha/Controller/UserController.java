@@ -56,7 +56,19 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<User> login(@RequestBody User user) {
-        User loggedInUser = userService.loginUser(user.getUsername(), user.getPassword());
+        User loggedInUser = userService.loginUser(user.getUsername(), user.getPassword(), user.getRole());
+        if (loggedInUser != null) {
+            // Login successful, return the logged-in customer
+            return ResponseEntity.ok(loggedInUser);
+        } else {
+            // Login failed
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+    }
+
+    @PostMapping("/loginAdmin")
+    public ResponseEntity<User> loginAdmin(@RequestBody User user) {
+        User loggedInUser = userService.loginUser(user.getUsername(), user.getPassword(), user.getRole());
         if (loggedInUser != null) {
             // Login successful, return the logged-in customer
             return ResponseEntity.ok(loggedInUser);
@@ -77,7 +89,7 @@ public class UserController {
     }
 
     @PutMapping("/edit/{username}")
-    public ResponseEntity<User> updateCustomer(@PathVariable("username") String username, @RequestBody User userDetails) {
+    public ResponseEntity<User> updateUser(@PathVariable("username") String username, @RequestBody User userDetails) {
         User updatedUser = userService.updateUser(username, userDetails);
         if (updatedUser != null) {
             return ResponseEntity.ok(updatedUser);

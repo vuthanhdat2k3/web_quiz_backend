@@ -61,15 +61,7 @@ public class ExamCotroller {
         }
     }
 
-    @GetMapping("/exams2/{examId}")
-    public ResponseEntity<?> getQuestionsByExamId(@PathVariable int examId) {
-        List<Question> questions = questionRepository.findByExamId(examId);
-        if (questions.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy câu hỏi cho kỳ thi với id: " + examId);
-        } else {
-            return ResponseEntity.ok(questions);
-        }
-    }
+
 
 
     @GetMapping("/listExam")
@@ -82,6 +74,7 @@ public class ExamCotroller {
         }
     }
 
+    //Don't use
     @PutMapping("/editExam/{examName}")
     public ResponseEntity<Exam> updateExam(@PathVariable String examName, @RequestBody Exam examDetails) {
         List<Exam> exams = examRepository.findByExamName(examName);
@@ -98,9 +91,9 @@ public class ExamCotroller {
         }
     }
     @DeleteMapping("/deleteExam/{examName}")
-    public ResponseEntity<Void> deleteExamByExamName(@PathVariable("examName") String examName) {
+    public ResponseEntity<String> deleteExamByExamName(@PathVariable("examName") String examName) {
         examService.deleteExamByExamName(examName);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().body("Exam with name " + examName + " have been successfully deleted.");
 
     }
 

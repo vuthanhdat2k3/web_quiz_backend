@@ -20,7 +20,7 @@ public class Question {
     private String optionD;
     private String optionCorrect;
     private int examId;
-    private int contestId;
+//    private int contestId;
 //
 //    @ManyToOne
 //    @JsonIgnore

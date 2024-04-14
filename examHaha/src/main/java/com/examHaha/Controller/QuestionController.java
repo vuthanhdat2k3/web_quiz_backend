@@ -21,6 +21,18 @@ public class QuestionController {
     private final QuestionService questionService;
     private final QuestionRepository questionRepository;
 
+
+    @GetMapping("/questions/{examId}")
+    public ResponseEntity<?> getQuestionsByExamId(@PathVariable int examId) {
+        List<Question> questions = questionRepository.findByExamId(examId);
+        if (questions.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy câu hỏi cho kỳ thi với id: " + examId);
+        } else {
+            return ResponseEntity.ok(questions);
+        }
+    }
+
+    // Don't use
     @PutMapping("/editQuestion/{examId}")
     public ResponseEntity<?> updateQuestionByExamId(@PathVariable int examId, @RequestBody Question questionDetails) {
         List<Question> questions = questionRepository.findByExamId(examId);
@@ -65,6 +77,8 @@ public class QuestionController {
         }
         return response;
     }
+
+    // Don't use
     @GetMapping("/listQuestion")
     public ResponseEntity<List<Question>> getAllQuestion() {
         List<Question> questions = questionService.getAllQuestions();
@@ -74,6 +88,8 @@ public class QuestionController {
             return ResponseEntity.noContent().build();
         }
     }
+
+
     @DeleteMapping("/deleteQuestion/{examId}")
     public ResponseEntity<String> deleteQuestionsByExamId(@PathVariable int examId) {
         try {
@@ -84,6 +100,8 @@ public class QuestionController {
                     .body("Failed to delete questions for exam with ID " + examId + ".");
         }
     }
+
+    // Don't use
     @DeleteMapping("/deleteQuestionById/{questionId}")
     public ResponseEntity<String> deleteQuestionById(@PathVariable int questionId) {
         try {
